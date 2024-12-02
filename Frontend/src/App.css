@@ -1,0 +1,36 @@
+/* Reset Page */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.main-container {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding: 20px;
+  height: 100vh;
+}
+
+.dashboard-title {
+  font-size: 2rem;
+  color: #ffffff;
+  margin-bottom: 20px;
+}
+
+.ticker-selector-container {
+  margin: 20px 0;
+}
+
+.ticker-label {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.ticker-dropdown {
+  padding: 5px 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
