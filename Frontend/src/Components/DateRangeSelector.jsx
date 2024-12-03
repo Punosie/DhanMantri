@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { HStack, VStack } from "@chakra-ui/react";
-import DatePickerComponent from "./ui/datepicker";
+import DatePickerComponent from "./ui/datepicker.jsx";
 import { Field } from "./ui/field.jsx";
 import { Button } from "./ui/button.jsx"
 
