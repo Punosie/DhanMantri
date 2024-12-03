@@ -43,8 +43,9 @@ const fetchStockData = async (symbol, timeRange, startDateInput, endDateInput) =
   }
 
   try {
+    const url = 'https://dhanmantri-backend.onrender.com'
     const response = await axios.get(
-      `http://localhost:5000/api/stocks/fetch?symbol=${symbol}&startDate=${startDate}&endDate=${endDate}`
+      `${url}/api/stocks/fetch?symbol=${symbol}&startDate=${startDate}&endDate=${endDate}`
     );
     return response.data;
   } catch (error) {
