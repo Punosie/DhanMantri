@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { HStack, VStack } from "@chakra-ui/react";
 import DatePickerComponent from "./ui/datepicker";
-import { Field } from "@/components/ui/field";
-import { Button } from "@/components/ui/button"
+import { Field } from "./ui/field.jsx";
+import { Button } from "./ui/button.jsx"
 
 const DateRangeSelector = ({ onApply }) => {
   const [startDate, setStartDate] = useState(null);

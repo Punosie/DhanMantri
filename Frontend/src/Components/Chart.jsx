@@ -4,7 +4,7 @@ import TimeRangeSelector from "./TimeRangeSelector";
 import fetchStockData from "../Services/StockService";
 import { FaChartLine } from "react-icons/fa";
 import { LuCandlestickChart } from "react-icons/lu";
-import { Button } from "@/components/ui/button";
+import { Button } from "./ui/button";
 import { Box, Flex, Heading, HStack, VStack } from "@chakra-ui/react";
 import DateRangeSelector from "./DateRangeSelector";
 

@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button"
+import { Button } from "./ui/button.jsx"
 import { Flex } from "@chakra-ui/react";
 
 const TimeRangeSelector = ({ onTimeRangeChange }) => {
