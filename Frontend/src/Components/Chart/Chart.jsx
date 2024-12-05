@@ -9,6 +9,7 @@ import { Box, VStack, Heading, HStack } from "@chakra-ui/react";
 import DateRangeSelector from "../DateRangeSelector";
 import { toaster } from "../ui/toaster";
 import generateChartOptions from "./ChartOptions";
+import Loading from "../Loading";
 
 const Chart = ({ symbol }) => {
   // Local Storage - Load previous settings or defaults
@@ -21,6 +22,7 @@ const Chart = ({ symbol }) => {
   const [chartType, setChartType] = useState(storedChartType);
   const [timeRange, setTimeRange] = useState(storedTimeRange);
   const [dateRange, setDateRange] = useState(storedDateRange);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Fetch Stock Data
   const fetchData = async () => {
@@ -37,6 +39,7 @@ const Chart = ({ symbol }) => {
         console.error("No data found for the selected symbol");
         return;
       }
+      setIsLoading(false);
       setStockData(data);
     } catch (error) {
       console.error("Error fetching stock data:", error);
@@ -82,7 +85,29 @@ const Chart = ({ symbol }) => {
   const toggleChartType = () => {
     setChartType((prevType) => (prevType === "line" ? "candlestick" : "line"));
   };
-
+ while (isLoading) {
+    return (
+        <VStack gap="6" w="100%" h="85vh" p="6" bg="transparent" color="white" borderRadius="md">
+        <Heading size="lg">{symbol.replace(".NS", "")}</Heading>
+        <Box w="100%" h="80vh" align="center">
+          <HStack justify="center" align="start" w="100%">
+            <VStack gap="4" align="center" w="100%">
+              <HStack gap="4" align="center">
+                <TimeRangeSelector onTimeRangeChange={handleTimeRangeChange} />
+                <Button onClick={toggleChartType} colorPalette="red" variant="outline" p="5">
+                  {chartType === "line" ? <LuChartCandlestick /> : <FaChartLine />}
+                </Button>
+              </HStack>
+              <Loading />
+            </VStack>
+            <VStack gap="4" align="start" mt="16">
+              <DateRangeSelector onApply={handleDateRangeApply} />
+            </VStack>
+          </HStack>
+        </Box>
+      </VStack>
+    );
+  }
   return (
     <VStack gap="6" w="100%" h="85vh" p="6" bg="transparent" color="white" borderRadius="md">
       <Heading size="lg">{symbol.replace(".NS", "")}</Heading>

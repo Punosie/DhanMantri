@@ -31,6 +31,6 @@
 .ticker-dropdown {
   padding: 5px 10px;
   font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  border: 1px solid #000000;
+  border-radius: 5px;
 }
