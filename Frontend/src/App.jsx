@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Chart from './Components/Chart';
-import { Box, Text, Heading, Flex, Select } from '@chakra-ui/react';
 import './App.css';
+import { Spinner } from "@chakra-ui/react"
+
 
 const App = () => {
   // List of stock symbols including NIFTY50 stocks
@@ -19,48 +20,70 @@ const App = () => {
     "MARICO.NS", "IOC.NS", "GAIL.NS"
   ];
 
-  const stockSymbols = ["MSFT", "AAPL", "GOOG", "AMZN"];  // Add more stock symbols if needed
+  const stockSymbols = ["MSFT", "AAPL", "GOOG"];  // Add more stock symbols if needed
 
   // Combine both lists
   const symbols = stockSymbols.concat(nifty50Symbols);
 
-  // State for selected symbol
-  const [selectedSymbol, setSelectedSymbol] = useState(symbols[0]);
+  // State for selected symbol and loading state
+  const [selectedSymbol, setSelectedSymbol] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  // Retrieve saved symbol from localStorage on initial render
+  useEffect(() => {
+    const savedSymbol = localStorage.getItem('selectedSymbol');
+    if (savedSymbol) {
+      setSelectedSymbol(savedSymbol);
+    } else {
+      setSelectedSymbol(symbols[0]); // Default to first symbol if no saved value
+    }
+    setLoading(false); // Set loading to false once data is fetched
+  }, []);
 
   // Handler for changing selected symbol
   const handleSymbolChange = (event) => {
-    setSelectedSymbol(event.target.value);
+    const newSymbol = event.target.value;
+    setSelectedSymbol(newSymbol);
+    localStorage.setItem('selectedSymbol', newSymbol); // Save the selected symbol to localStorage
   };
+
+  if (loading) {
+    return (
+      <>
+        <Spinner color="teal.500" size="lg" />
+      </>
+    ); // Show loading message while fetching saved symbol
+  }
 
   return (
     <>
       <div className="main-container">
-      <h1 className="dashboard-title">Stock Dashboard</h1>
+        <h1 className="dashboard-title">Stock Dashboard</h1>
 
-      {/* Dropdown for selecting stock symbol */}
-      <div className="ticker-selector-container">
-        <label htmlFor="symbol-select" className="ticker-label">Select Ticker:</label>
-        <select
-          id="symbol-select"
-          className="ticker-dropdown"
-          value={selectedSymbol}
-          onChange={handleSymbolChange}
-        >
-          {/* Map over the symbols and display each option */}
-          {symbols.map((symbol) => (
-            <option key={symbol} value={symbol}>
-              {/* Remove the ".NS" part of the symbol when displaying */}
-              {symbol.replace('.NS', '')}
-            </option>
-          ))}
-        </select>
-      </div>
+        {/* Dropdown for selecting stock symbol */}
+        <div className="ticker-selector-container">
+          <label htmlFor="symbol-select" className="ticker-label">Select Ticker:</label>
+          <select
+            id="symbol-select"
+            className="ticker-dropdown"
+            value={selectedSymbol}
+            onChange={handleSymbolChange}
+          >
+            {/* Map over the symbols and display each option */}
+            {symbols.map((symbol) => (
+              <option key={symbol} value={symbol}>
+                {/* Remove the ".NS" part of the symbol when displaying */}
+                {symbol.replace('.NS', '')}
+              </option>
+            ))}
+          </select>
+        </div>
 
-      {/* Render Chart Component */}
-      <div className="chart-container">
-        <Chart symbol={selectedSymbol} />
+        {/* Render Chart Component and pass the selectedSymbol */}
+        <div className="chart-container">
+          <Chart symbol={selectedSymbol} />
+        </div>
       </div>
-    </div>
     </>
   );
 };
