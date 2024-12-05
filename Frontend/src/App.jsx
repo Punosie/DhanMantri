@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Chart from './Components/Chart';
+import Chart from './Components/Chart/Chart';
 import './App.css';
 import { Spinner } from "@chakra-ui/react"
 

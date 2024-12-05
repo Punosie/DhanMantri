@@ -22,7 +22,12 @@ const DateRangeSelector = ({ onApply }) => {
       }
       onApply(startDate, endDate);
     } else {
-      alert("Please select both start and end dates.");
+      toaster.create({
+        title: "Invalid Date Range",
+        description: "Please select both start and end dates.",
+        type: "warning",
+      });
+      return;
     }
   };
 
