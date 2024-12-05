@@ -3,7 +3,7 @@ import ReactECharts from "echarts-for-react";
 import TimeRangeSelector from "./TimeRangeSelector";
 import fetchStockData from "../Services/StockService";
 import { FaChartLine } from "react-icons/fa";
-import { LuCandlestickChart } from "react-icons/lu";
+import { LuChartCandlestick } from "react-icons/lu";
 import { Button } from "./ui/button";
 import { Box, VStack, Heading, HStack } from "@chakra-ui/react";
 import DateRangeSelector from "./DateRangeSelector";
@@ -141,7 +141,7 @@ const Chart = ({ symbol }) => {
             <HStack gap="4" align="center">
               <TimeRangeSelector onTimeRangeChange={handleTimeRangeChange} />
               <Button onClick={toggleChartType} colorPalette="red" variant="outline" p="5">
-                {chartType === "line" ? <LuCandlestickChart /> : <FaChartLine />}
+                {chartType === "line" ? <LuChartCandlestick /> : <FaChartLine />}
               </Button>
             </HStack>
             <ReactECharts option={chartOptions} style={{ height: "70vh", width: "100%" }} />
