@@ -7,6 +7,8 @@ import { LuChartCandlestick } from "react-icons/lu";
 import { Button } from "./ui/button";
 import { Box, VStack, Heading, HStack } from "@chakra-ui/react";
 import DateRangeSelector from "./DateRangeSelector";
+import { Toaster, toaster } from "./ui/toaster";
+
 
 const Chart = ({ symbol }) => {
   // Local Storage - Load previous settings or defaults
@@ -20,10 +22,31 @@ const Chart = ({ symbol }) => {
   const [timeRange, setTimeRange] = useState(storedTimeRange);
   const [dateRange, setDateRange] = useState(storedDateRange);
 
+  const showToast = () => {
+    toaster.create({
+      description: "File saved successfully",
+      type: "loading",
+    })
+  };
+
+
   // Fetch Stock Data
   const fetchData = async () => {
     try {
       const data = await fetchStockData(symbol, timeRange, dateRange.startDate, dateRange.endDate);
+      // console.log(data);
+      if (data.length === 0) {
+          toaster.create({
+          title: "No Data Found",
+          description: `No data found for ${symbol.replace(".NS", "")}`,
+          type: "error",
+        });
+
+
+        localStorage.clear();
+        console.error("No data found for the selected symbol");
+        return;
+      }
       setStockData(data);
     } catch (error) {
       console.error("Error fetching stock data:", error);

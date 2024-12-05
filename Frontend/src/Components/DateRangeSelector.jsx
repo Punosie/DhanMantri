@@ -3,6 +3,7 @@ import { HStack, VStack } from "@chakra-ui/react";
 import DatePickerComponent from "./ui/Datepicker.jsx";
 import { Field } from "./ui/field.jsx";
 import { Button } from "./ui/button.jsx"
+import { toaster } from "./ui/toaster.jsx";
 
 const DateRangeSelector = ({ onApply }) => {
   const [startDate, setStartDate] = useState(null);
@@ -10,11 +11,28 @@ const DateRangeSelector = ({ onApply }) => {
 
   const handleApply = () => {
     if (startDate && endDate) {
+      if (startDate > endDate) {
+
+        toaster.create({
+          title: "Invalid Date Range",
+          description: "Start date cannot be after end date.",
+          type: "error",
+        });
+        return;
+      }
       onApply(startDate, endDate);
     } else {
       alert("Please select both start and end dates.");
     }
   };
+
+
+  const handleClear = () => {
+    setStartDate(null);
+    setEndDate(null);
+  };
+
+
 
   return (
     <>
@@ -27,9 +45,15 @@ const DateRangeSelector = ({ onApply }) => {
                     <DatePickerComponent selectedDate={endDate} onChange={setEndDate} />
                 </Field>
             </HStack>
-            <Button onClick={handleApply} colorPalette="teal" variant="outline" w="100% ">  
+            <HStack width="100%">
+              <Button onClick={handleApply} colorPalette="teal" variant="outline" flex="1">  
                 Apply
-            </Button>
+              </Button>
+              <Button onClick={handleClear} colorPalette="red" variant="outline" flex="1">  
+                Clear
+              </Button>
+            </HStack>
+
         </VStack>
     </>
   );

@@ -50,7 +50,7 @@ const fetchStockData = async (symbol, timeRange, startDateInput, endDateInput) =
     return response.data;
   } catch (error) {
     console.error("Error fetching stock data:", error);
-    return 'Error fetching stock data';
+    return "";
   }
 };
 
