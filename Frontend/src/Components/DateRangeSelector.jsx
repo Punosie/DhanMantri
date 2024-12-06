@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { HStack, VStack } from "@chakra-ui/react";
+import { HStack, VStack, Heading } from "@chakra-ui/react";
 import DatePickerComponent from "./ui/Datepicker.jsx";
 import { Field } from "./ui/field.jsx";
 import { Button } from "./ui/button.jsx"
@@ -41,7 +41,8 @@ const DateRangeSelector = ({ onApply }) => {
 
   return (
     <>
-        <VStack gap="6">
+        <VStack gap="6" >
+            <Heading size="lg">Select Date Range</Heading>
             <HStack gap="6">
                 <Field label="Start Date">
                     <DatePickerComponent selectedDate={startDate} onChange={setStartDate} />

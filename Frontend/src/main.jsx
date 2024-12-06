@@ -9,8 +9,8 @@ import { Toaster } from './Components/ui/toaster.jsx'
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Provider>
-      <App />
       <Toaster />
+      <App />
     </Provider>
   </StrictMode>,
 )

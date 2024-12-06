@@ -10,6 +10,10 @@ import DateRangeSelector from "../DateRangeSelector";
 import { toaster } from "../ui/toaster";
 import generateChartOptions from "./ChartOptions";
 import Loading from "../Loading";
+import MovingAvgForm from "../MovingAvgForm";
+import calculateMovingAverage from "../../Utils/CalcMA";
+
+
 
 const Chart = ({ symbol }) => {
   // Local Storage - Load previous settings or defaults
@@ -18,6 +22,7 @@ const Chart = ({ symbol }) => {
   const storedDateRange = JSON.parse(localStorage.getItem("dateRange")) || { startDate: null, endDate: null };
 
   // State
+  const [maData, setMaData] = useState([]);
   const [stockData, setStockData] = useState([]);
   const [chartType, setChartType] = useState(storedChartType);
   const [timeRange, setTimeRange] = useState(storedTimeRange);
@@ -58,6 +63,21 @@ const Chart = ({ symbol }) => {
     fetchData();
   }, [symbol, timeRange, dateRange]);
 
+
+  const filterStockData = (data, parameter) => {
+    return data.map(item => {
+      if (item[parameter] !== undefined) {
+        return {
+          Date: item.Date,
+          [parameter]: item[parameter], // Dynamically keep only the selected parameter
+        };
+      } else {
+        console.warn(`Parameter ${parameter} not found in item`, item);
+        return { Date: item.Date }; // In case the parameter doesn't exist, return only Date
+      }
+    });
+  };
+
   // Format stock data for the chart
   const formatData = (data) => {
     const dates = data.map(item => new Date(item.Date).toLocaleDateString());
@@ -69,9 +89,16 @@ const Chart = ({ symbol }) => {
   const { formattedDates, close } = formatData(stockData);
 
   // Generate chart options
-  const chartOptions = generateChartOptions(chartType, formattedDates, close, stockData);
+  const chartOptions = generateChartOptions(chartType, formattedDates, close, stockData, maData);
 
   // Handlers
+  const handleMovingAvgApply = ({ period, type, parameter }) => {
+    const newFilteredData = filterStockData(stockData, parameter);
+    const MA = calculateMovingAverage(newFilteredData, period[0], type[0], parameter[0]);
+    console.log("Moving Average", MA);
+    setMaData(MA);
+  };
+
   const handleTimeRangeChange = (newRange) => {
     setTimeRange(newRange);
     setDateRange({ startDate: null, endDate: null });
@@ -124,6 +151,7 @@ const Chart = ({ symbol }) => {
           </VStack>
           <VStack gap="4" align="start" mt="16">
             <DateRangeSelector onApply={handleDateRangeApply} />
+            <MovingAvgForm onApply={handleMovingAvgApply} />
           </VStack>
         </HStack>
       </Box>
