@@ -10,10 +10,7 @@ import DateRangeSelector from "../DateRangeSelector";
 import { toaster } from "../ui/toaster";
 import generateChartOptions from "./ChartOptions";
 import Loading from "../Loading";
-import MovingAvgForm from "../MovingAvgForm";
-import calculateMovingAverage from "../../Utils/CalcMA";
-
-
+// import MovingAvgForm from "../MovingAvgForm";
 
 const Chart = ({ symbol }) => {
   // Local Storage - Load previous settings or defaults
@@ -22,7 +19,7 @@ const Chart = ({ symbol }) => {
   const storedDateRange = JSON.parse(localStorage.getItem("dateRange")) || { startDate: null, endDate: null };
 
   // State
-  const [maData, setMaData] = useState([]);
+  // const [maData, setMaData] = useState([]);
   const [stockData, setStockData] = useState([]);
   const [chartType, setChartType] = useState(storedChartType);
   const [timeRange, setTimeRange] = useState(storedTimeRange);
@@ -89,7 +86,7 @@ const Chart = ({ symbol }) => {
   const { formattedDates, close } = formatData(stockData);
 
   // Generate chart options
-  const chartOptions = generateChartOptions(chartType, formattedDates, close, stockData, maData);
+  const chartOptions = generateChartOptions(chartType, formattedDates, close, stockData);
 
   // Handlers
   const handleMovingAvgApply = ({ period, type, parameter }) => {
@@ -151,7 +148,7 @@ const Chart = ({ symbol }) => {
           </VStack>
           <VStack gap="4" align="start" mt="16">
             <DateRangeSelector onApply={handleDateRangeApply} />
-            <MovingAvgForm onApply={handleMovingAvgApply} />
+            {/* <MovingAvgForm onApply={handleMovingAvgApply} /> */}
           </VStack>
         </HStack>
       </Box>
