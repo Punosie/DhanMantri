@@ -41,8 +41,8 @@ const DateRangeSelector = ({ onApply }) => {
 
   return (
     <>
-        <VStack gap="6" >
-            <Heading size="lg">Select Date Range</Heading>
+        <VStack gap="6" px="8">
+            <Heading fontSize="2xl" fontWeight="bold" color="gray.200">Select Date Range</Heading>
             <HStack gap="6">
                 <Field label="Start Date">
                     <DatePickerComponent selectedDate={startDate} onChange={setStartDate} />
@@ -59,7 +59,6 @@ const DateRangeSelector = ({ onApply }) => {
                 Clear
               </Button>
             </HStack>
-
         </VStack>
     </>
   );

@@ -10,6 +10,7 @@ import DateRangeSelector from "../DateRangeSelector";
 import { toaster } from "../ui/toaster";
 import generateChartOptions from "./ChartOptions";
 import Loading from "../Loading";
+import News from "../News/News";
 // import MovingAvgForm from "../MovingAvgForm";
 
 const Chart = ({ symbol }) => {
@@ -133,10 +134,10 @@ const Chart = ({ symbol }) => {
     );
   }
   return (
-    <VStack gap="6" w="100%" h="85vh" p="6" bg="transparent" color="white" borderRadius="md">
+    <VStack gap="6" w="100%" h="100%" p="6" bg="transparent" color="white" borderRadius="md">
       <Heading size="lg">{symbol.replace(".NS", "")}</Heading>
-      <Box w="100%" h="80vh" align="center">
-        <HStack justify="center" align="start" w="100%">
+      <Box w="100%" h="100%" align="center" bg="transparent">
+        <HStack justify="center" align="start" w="100%" bg="transparent">
           <VStack gap="4" align="center" w="100%">
             <HStack gap="4" align="center">
               <TimeRangeSelector onTimeRangeChange={handleTimeRangeChange} />
@@ -144,11 +145,12 @@ const Chart = ({ symbol }) => {
                 {chartType === "line" ? <LuChartCandlestick /> : <FaChartLine />}
               </Button>
             </HStack>
-            <ReactECharts option={chartOptions} style={{ height: "70vh", width: "100%" }} />
+            <ReactECharts  option={chartOptions} style={{ height: "750px", width: "70vw" }} />
           </VStack>
-          <VStack gap="4" align="start" mt="16">
-            <DateRangeSelector onApply={handleDateRangeApply} />
+          <VStack gap="4" align="start" mt="16" bg="transparent">
+            <DateRangeSelector onApply={handleDateRangeApply}/>
             {/* <MovingAvgForm onApply={handleMovingAvgApply} /> */}
+            <News />
           </VStack>
         </HStack>
       </Box>

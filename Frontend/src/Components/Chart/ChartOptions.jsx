@@ -73,6 +73,20 @@
       ],
 
       grid: { left: "10%", right: "10%", top: "10%", bottom: "15%" },
+      dataZoom: [
+        {
+          type: 'inside',
+          xAxisIndex: 0,
+          start: 0,
+          end: 100,
+        },
+        {
+          type: 'inside',
+          xAxisIndex: 0,
+          start: 0,
+          end: 100,
+        },
+      ],
       series: [
         chartType === "line"
           ? {
