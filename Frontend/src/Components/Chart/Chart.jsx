@@ -113,7 +113,6 @@ const Chart = ({ symbol }) => {
  while (isLoading) {
     return (
         <VStack gap="6" w="100%" h="85vh" p="6" bg="transparent" color="white" borderRadius="md">
-        <Heading size="lg">{symbol.replace(".NS", "")}</Heading>
         <Box w="100%" h="80vh" align="center">
           <HStack justify="center" align="start" w="100%">
             <VStack gap="4" align="center" w="100%">
@@ -135,7 +134,6 @@ const Chart = ({ symbol }) => {
   }
   return (
     <VStack gap="6" w="100%" h="100%" p="6" bg="transparent" color="white" borderRadius="md">
-      <Heading size="lg">{symbol.replace(".NS", "")}</Heading>
       <Box w="100%" h="100%" align="center" bg="transparent">
         <HStack justify="center" align="start" w="100%" bg="transparent">
           <VStack gap="4" align="center" w="100%">
@@ -145,7 +143,7 @@ const Chart = ({ symbol }) => {
                 {chartType === "line" ? <LuChartCandlestick /> : <FaChartLine />}
               </Button>
             </HStack>
-            <ReactECharts  option={chartOptions} style={{ height: "750px", width: "70vw" }} />
+            <ReactECharts  option={chartOptions} style={{ height: "720px", width: "70vw" }} />
           </VStack>
           <VStack gap="4" align="start" mt="16" bg="transparent">
             <DateRangeSelector onApply={handleDateRangeApply}/>

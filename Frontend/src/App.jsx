@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Chart from './Components/Chart/Chart';
 import './App.css';
 import { Spinner } from "@chakra-ui/react"
+import Navbar from './Components/Navbar/Navbar';
 
 
 const App = () => {
@@ -57,9 +58,8 @@ const App = () => {
 
   return (
     <>
+      <Navbar />
       <div className="main-container">
-        <h1 className="dashboard-title">Stock Dashboard</h1>
-
         {/* Dropdown for selecting stock symbol */}
         <div className="ticker-selector-container">
           <label htmlFor="symbol-select" className="ticker-label">Select Ticker:</label>
