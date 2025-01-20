@@ -5,8 +5,12 @@ import { useState } from "react";
 
 const AuthButton = () => {
     const { UserLoggedIn } = useAuth();
-    const [loggedIn, setLoggedIn] = useState(false);
+    const [loggedIn, setLoggedIn] = useState(UserLoggedIn);
     const [error, setError] = useState(null);
+
+    useEffect(() => {
+        setLoggedIn(UserLoggedIn);
+    }, [UserLoggedIn]);
 
     const onSubmit = async (e) => {
         e.preventDefault();
@@ -21,7 +25,7 @@ const AuthButton = () => {
             }
         } else {
             // Handle sign-in
-            setError(null); // Clear previous errors
+            setError(null);
             try {
                 await doSignInWithGoogle();
                 setLoggedIn(true);
@@ -49,7 +53,7 @@ const AuthButton = () => {
             >
                 {loggedIn ? "Sign Out" : "Sign In"}
             </Button>
-            {error && <p>{error}</p>} {/* Display the error message */}
+            {error && console.error(error)}
         </div>
     );
 };
