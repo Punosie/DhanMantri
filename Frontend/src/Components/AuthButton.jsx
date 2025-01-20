@@ -8,10 +8,6 @@ const AuthButton = () => {
     const [loggedIn, setLoggedIn] = useState(UserLoggedIn);
     const [error, setError] = useState(null);
 
-    useEffect(() => {
-        setLoggedIn(UserLoggedIn);
-    }, [UserLoggedIn]);
-
     const onSubmit = async (e) => {
         e.preventDefault();
 
