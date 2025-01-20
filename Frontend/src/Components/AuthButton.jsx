@@ -1,4 +1,4 @@
-import { doSignInWithGoogle } from "../Firebase/auth";
+import { doSignInWithGoogle, doSignOut } from "../Firebase/auth";
 import { Button } from "@chakra-ui/react";
 import { useAuth } from "../Contexts/AuthContext";
 import { useState } from "react";
@@ -21,10 +21,10 @@ const AuthButton = () => {
             }
         } else {
             // Handle sign-in
-            setLoggedIn(true);
             setError(null); // Clear previous errors
             try {
                 await doSignInWithGoogle();
+                setLoggedIn(true);
             } catch (error) {
                 console.error("Error signing in:", error);
                 setLoggedIn(false);
