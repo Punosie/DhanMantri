@@ -1,4 +1,4 @@
-import { doSignInWithGoogle } from "../Firebase/auth"0000;
+import { doSignInWithGoogle } from "../Firebase/auth";
 import { Button } from "@chakra-ui/react";
 import { useAuth } from "../Contexts/AuthContext";
 import { useState } from "react";
