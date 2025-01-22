@@ -1,4 +1,4 @@
-import { Box, Button, Flex, HStack, Heading } from "@chakra-ui/react";
+import { Box, Flex, HStack, Heading } from "@chakra-ui/react";
 import AuthButton from "../AuthButton";
 import {Avatar} from "../ui/avatar"
 import { useAuth } from "../../Contexts/AuthContext";
@@ -8,7 +8,7 @@ const Navbar = () => {
 
     return (
         <Box>
-            <Flex bg="transparent" w="100%" h="10vh" px="5" justifyContent="space-between" alignItems="center" >
+            <Flex bg="transparent" w="100%" h="5vh" px="5" justifyContent="space-between" alignItems="center" >
                 {/* Logo Container */}
                 <Box h="100%" w="auto">
                     <Box h="100%" w="auto">

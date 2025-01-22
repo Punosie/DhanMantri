@@ -1,10 +1,10 @@
 import { useState} from 'react';
 import Chart from './Components/Chart/Chart';
-import './App.css';
 import { Box } from "@chakra-ui/react"
 import Navbar from './Components/Navbar/Navbar';
 import Search from './Components/Search';
 import symbols from './Utils/stocks';
+import Footer from './Components/Footer';
 
 const App = () => {
   // Retrieve selected stock symbol from localStorage
@@ -28,12 +28,12 @@ const App = () => {
         {/* Use the Search component */}
         <Search selectedSymbol={selectedSymbol} onSymbolChange={handleSymbolChange} />
       </Box>  
-      <div className="main-container">
-        {/* Render Chart Component and pass the selectedSymbol */}
-        <div className="chart-container">
+      <Box >
+        <Box >
           <Chart symbol={selectedSymbol} />
-        </div>
-      </div>
+        </Box>
+      </Box>
+      <Footer />
     </>
   );
 };
