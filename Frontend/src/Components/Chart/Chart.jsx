@@ -38,7 +38,6 @@ const Chart = ({ symbol }) => {
           type: "error",
         });
 
-        localStorage.clear();
         console.error("No data found for the selected symbol");
         return;
       }
