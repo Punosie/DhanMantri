@@ -8,6 +8,7 @@ export function AuthProvider({ children }) {
     const [currentUser, setCurrentUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [UserLoggedIn, setUserLoggedIn] = useState(false);
+    const [photoURL, setPhotoURL] = useState(null);
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, initialiseUser);
@@ -17,6 +18,7 @@ export function AuthProvider({ children }) {
     async function initialiseUser(user) {
         if (user) {
             setCurrentUser({ ...user });
+            setPhotoURL(user.photoURL);
             setUserLoggedIn(true);
         } else {
             setCurrentUser(null);
@@ -29,6 +31,7 @@ export function AuthProvider({ children }) {
         currentUser,
         UserLoggedIn,
         loading,
+        photoURL,
     };
 
     return (
