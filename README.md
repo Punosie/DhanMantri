@@ -128,7 +128,7 @@ The suite needs MongoDB with data (step 1 above). It covers API validation and c
 
 ## Developer tooling
 
-The repository is indexed with [graphify](https://github.com/safishamsi/graphify) (`graphify-out/`). A git hook rebuilds the graph after each commit; run `graphify hook install` once per clone to enable it.
+The repository is set up for [graphify](https://github.com/safishamsi/graphify) (see `CLAUDE.md`). The graph in `graphify-out/` is generated locally and not committed: run `graphify update .` to build it and `graphify hook install` to rebuild it after every commit.
 
 ## Analytics
 
