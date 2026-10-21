@@ -114,7 +114,7 @@ The suite needs MongoDB with data (step 1 above). It covers API validation and c
 **Frontend → Vercel** (project `dhanmantri`, root directory `Frontend`, production domain `dhanmantri-app.vercel.app`)
 1. `vercel link` inside `Frontend/`, or import the repo with *Root Directory* `Frontend`.
 2. Add any `VITE_*` variables you need (Firebase, Finnhub, and `VITE_API_URL` if the API URL changes).
-3. `vercel --prod`, or push to `main` once the Git integration is connected.
+3. Pushes to `main` deploy production and PRs get preview deployments (Git integration). For a manual deploy, run `vercel --prod` from the repository root.
 4. For Google sign-in, add the Vercel domain to Firebase Auth → Settings → Authorized domains.
 
 **Data → GitHub Actions**: add the `MONGO_URL` repository secret. `Fetch stock data` then runs on weekdays at 22:30 UTC, or on demand from the Actions tab.
