@@ -1,96 +1,59 @@
 # Stock Data API 📈
 
-This is a backend API for fetching stock data from a MongoDB database. It allows clients to request stock information for a specific stock symbol over a given date range. The data is queried from the `STOCKS` collection in MongoDB.
+Express 5 API that serves daily stock candles from the MongoDB `STOCKS` collection. The [DataFetcher](../DataFetcher) fills that collection.
 
 ## Project Structure 🗂️
 
-- `index.js`                – Main entry point that sets up the Express server and routes.
-- `stockRoute.js`    – Defines routes for handling stock-related requests.
-- `stockController.js` – Contains the business logic for fetching stock data.
-- `db.js`                – MongoDB database connection setup file.
-- `.env`                    – Environment file for sensitive variables like the database URI and port number.
-- `package.json`            – Contains project dependencies and scripts.
+- `index.js`: Express app (security headers, compression, CORS, logging, error handling) and server lifecycle
+- `config.js`: environment configuration (reads `.env` locally)
+- `logger.js`: pino logger, the incoming request logger and request-ID context
+- `db/db.js`: MongoDB client, outgoing command logging and the `(Symbol, Date)` index
+- `routes/stockRoute.js`, `controller/stockController.js`: the stock endpoint
 
 ## Endpoints 🖥️
 
 ### `GET /api/stocks/fetch`
 
-This endpoint retrieves stock data based on the provided `symbol`, `startDate`, and `endDate`.
+Returns daily candles for a symbol, oldest first.
 
-#### Query Parameters
+| Query | Required | Description |
+| --- | --- | --- |
+| `symbol` | yes | Yahoo Finance ticker, e.g. `TCS.NS`, `M&M.NS`, `^NSEI`, `AAPL` |
+| `startDate` | no | `YYYY-MM-DD`, defaults to the earliest data |
+| `endDate` | no | `YYYY-MM-DD` (inclusive), defaults to now |
 
-- `symbol` (required): The stock symbol (e.g., "AAPL", "GOOG").
-- `startDate` (optional): The start date of the range in `YYYY-MM-DD` format.
-- `endDate` (optional): The end date of the range in `YYYY-MM-DD` format.
-
-#### Example Request
-
-``` example
-GET http://localhost:5000/api/stocks/fetch?symbol=AAPL&startDate=2023-01-01&endDate=2023-12-31
 ```
-
-#### Response
-
-- `200 OK`: Returns the stock data in JSON format.
-- `400 Bad Request`: If `symbol` is missing, or if `startDate` is after `endDate`.
-- `404 Not Found`: If no stock data is found for the given symbol and date range.
-- `500 Internal Server Error`: If an unexpected error occurs.
-
-#### Example Response
+GET http://localhost:5000/api/stocks/fetch?symbol=TCS.NS&startDate=2026-10-01&endDate=2026-10-21
+```
 
 ```json
 [
-  {
-    "Symbol": "AAPL",
-    "Date": "2023-05-15T00:00:00.000Z",
-    "Open": 170.50,
-    "Close": 173.12,
-    "High": 175.00,
-    "Low": 169.75,
-    "Volume": 125200000
-  },
-  {
-    "Symbol": "AAPL",
-    "Date": "2023-05-16T00:00:00.000Z",
-    "Open": 172.00,
-    "Close": 174.80,
-    "High": 176.00,
-    "Low": 171.50,
-    "Volume": 118000000
-  }
+  { "Date": "2026-10-20T18:30:00.000Z", "Open": 2484, "High": 2533.3, "Low": 2476.5, "Close": 2529, "Volume": 5703350 }
 ]
-
 ```
+
+- `200 OK`: the candles, or `[]` when the range has none. Responses carry `Cache-Control: public, max-age=300` and an ETag.
+- `400 Bad Request`: missing or invalid `symbol`, a malformed date, or `startDate` after `endDate`.
+- `500 Internal Server Error`: an unexpected error, which is logged with the request ID.
+
+### `GET /health`
+
+`200 {"status":"ok","db":"up"}`, or `503` when MongoDB is unreachable. Render uses this endpoint as its health check.
+
+## Logging 🪵
+
+- **Incoming:** every request is logged when its response finishes (method, URL, status, duration, origin, cache header). The `X-Request-Id` response header carries the request ID, and an incoming `X-Request-Id` is reused.
+- **Outgoing:** every MongoDB command is logged with its duration and the `reqId` of the request that triggered it (`LOG_DB_COMMANDS=false` turns this off).
+- Logs are pretty-printed in a terminal and written as JSON lines elsewhere, such as on Render. Health checks are logged only at `LOG_LEVEL=debug`.
 
 ## 🔧 Setup Instructions
 
-### STEP 1: Install Dependencies
-
-Make sure you have Node.js installed. Then, run the following command to install all required dependencies:
-
 ```bash
 npm install
+cp .env.example .env   # set MONGO_URL; see the file for logging and CORS options
+npm run dev            # node --watch, restarts on changes
+# or
+npm start              # production
 ```
 
-### STEP 2: Set up environment variables
-
-Create a `.env` file in the root directory and define the following variables:
-
-```.env
-PORT = 5000
-MONGO_URI=<your-mongo-db-uri>
-```
-
-### STEP 4: Start the server
-
-This project uses nodemon for running the server on the backend to help with refreshing while developement. Run the following command to start the Express server:
-
-```bash
-npm start
-```
-
-The server will now be running on `http://localhost:5000.`
-
-## Contributing 🤝
-
-If you'd like to contribute, feel free to fork the repository and submit a pull request with your changes. Ensure you follow good coding practices and write tests if applicable.
+The server runs on `http://localhost:5000`. It needs Node.js 22.12 or newer.
