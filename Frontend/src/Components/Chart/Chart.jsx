@@ -1,100 +1,82 @@
-import { useState, useEffect } from "react";
-import ReactECharts from "echarts-for-react";
-import TimeRangeSelector from "../TimeRangeSelector";
-import fetchStockData from "../../Services/StockService";
+import { lazy, Suspense, useEffect, useMemo, useState } from "react";
 import { FaChartLine } from "react-icons/fa";
 import { LuChartCandlestick } from "react-icons/lu";
+import { Box, Center, Stack, VStack, HStack } from "@chakra-ui/react";
+import TimeRangeSelector from "../TimeRangeSelector";
+import fetchStockData from "../../Services/StockService";
 import { Button } from "../ui/button";
-import { Box, VStack, Heading, HStack } from "@chakra-ui/react";
 import DateRangeSelector from "../DateRangeSelector";
 import { toaster } from "../ui/toaster";
 import generateChartOptions from "./ChartOptions";
 import Loading from "../Loading";
 import News from "../News/News";
-// import MovingAvgForm from "../MovingAvgForm";
+import { symbolLabel } from "../../Utils/stocks";
+
+// ECharts is the heaviest dependency, so it loads in its own chunk. Start downloading it
+// right away so it arrives in parallel with the first data request instead of after it.
+const echartModule = import("./EChart");
+const EChart = lazy(() => echartModule);
+
+const CHART_HEIGHT = { base: "420px", md: "600px", xl: "720px" };
+
+const readStored = (key, fallback) => {
+  try {
+    return JSON.parse(localStorage.getItem(key)) ?? fallback;
+  } catch {
+    return fallback;
+  }
+};
 
 const Chart = ({ symbol }) => {
   // Local Storage - Load previous settings or defaults
-  const storedChartType = JSON.parse(localStorage.getItem("chartType")) || "line";
-  const storedTimeRange = JSON.parse(localStorage.getItem("timeRange")) || "1m";
-  const storedDateRange = JSON.parse(localStorage.getItem("dateRange")) || { startDate: null, endDate: null };
+  const [chartType, setChartType] = useState(() => readStored("chartType", "line"));
+  const [timeRange, setTimeRange] = useState(() => readStored("timeRange", "1m"));
+  const [dateRange, setDateRange] = useState(() => readStored("dateRange", { startDate: null, endDate: null }));
+  const [result, setResult] = useState({ key: null, data: [] });
 
-  // State
-  // const [maData, setMaData] = useState([]);
-  const [stockData, setStockData] = useState([]);
-  const [chartType, setChartType] = useState(storedChartType);
-  const [timeRange, setTimeRange] = useState(storedTimeRange);
-  const [dateRange, setDateRange] = useState(storedDateRange);
-  const [isLoading, setIsLoading] = useState(true);
-
-  // Fetch Stock Data
-  const fetchData = async () => {
-    try {
-      const data = await fetchStockData(symbol, timeRange, dateRange.startDate, dateRange.endDate);
-      if (data.length === 0) {
-        toaster.create({
-          title: "No Data Found",
-          description: `No data found for ${symbol.replace(".NS", "")}`,
-          type: "error",
-        });
-
-        console.error("No data found for the selected symbol");
-        return;
-      }
-      setIsLoading(false);
-      setStockData(data);
-    } catch (error) {
-      console.error("Error fetching stock data:", error);
-    }
-  };
+  const requestKey = [symbol, timeRange, dateRange.startDate, dateRange.endDate].join("|");
+  const isLoading = result.key !== requestKey;
+  const stockData = result.data;
 
   // Save settings to Local Storage
   useEffect(() => {
-    localStorage.setItem("chartType", JSON.stringify(chartType));
-    localStorage.setItem("timeRange", JSON.stringify(timeRange));
-    localStorage.setItem("dateRange", JSON.stringify(dateRange));
+    try {
+      localStorage.setItem("chartType", JSON.stringify(chartType));
+      localStorage.setItem("timeRange", JSON.stringify(timeRange));
+      localStorage.setItem("dateRange", JSON.stringify(dateRange));
+    } catch {
+      // storage unavailable
+    }
   }, [chartType, timeRange, dateRange]);
 
-  // Fetch data when symbol, time range, or date range changes
+  // Fetch data when symbol, time range, or date range changes; abort stale requests
   useEffect(() => {
-    fetchData();
-  }, [symbol, timeRange, dateRange]);
-
-
-  const filterStockData = (data, parameter) => {
-    return data.map(item => {
-      if (item[parameter] !== undefined) {
-        return {
-          Date: item.Date,
-          [parameter]: item[parameter], // Dynamically keep only the selected parameter
-        };
-      } else {
-        console.warn(`Parameter ${parameter} not found in item`, item);
-        return { Date: item.Date }; // In case the parameter doesn't exist, return only Date
-      }
-    });
-  };
-
-  // Format stock data for the chart
-  const formatData = (data) => {
-    const dates = data.map(item => new Date(item.Date).toLocaleDateString());
-    const close = data.map(item => item.Close);
-    const open = data.map(item => item.Open);
-    return { formattedDates: dates, close, open };
-  };
-
-  const { formattedDates, close } = formatData(stockData);
+    const controller = new AbortController();
+    fetchStockData(symbol, timeRange, dateRange.startDate, dateRange.endDate, controller.signal)
+      .then((data) => {
+        if (data.length === 0) {
+          toaster.create({
+            title: "No Data Found",
+            description: `No data found for ${symbolLabel(symbol)} in this range`,
+            type: "warning",
+          });
+        }
+        setResult({ key: requestKey, data });
+      })
+      .catch((error) => {
+        if (controller.signal.aborted) return;
+        toaster.create({
+          title: "Could not load data",
+          description: error.response?.data?.message || "The stock server is not responding. Please try again.",
+          type: "error",
+        });
+        setResult({ key: requestKey, data: [] });
+      });
+    return () => controller.abort();
+  }, [requestKey, symbol, timeRange, dateRange.startDate, dateRange.endDate]);
 
   // Generate chart options
-  const chartOptions = generateChartOptions(chartType, formattedDates, close, stockData);
-
-  // Handlers
-  const handleMovingAvgApply = ({ period, type, parameter }) => {
-    const newFilteredData = filterStockData(stockData, parameter);
-    const MA = calculateMovingAverage(newFilteredData, period[0], type[0], parameter[0]);
-    console.log("Moving Average", MA);
-    setMaData(MA);
-  };
+  const chartOptions = useMemo(() => generateChartOptions(chartType, stockData), [chartType, stockData]);
 
   const handleTimeRangeChange = (newRange) => {
     setTimeRange(newRange);
@@ -109,48 +91,46 @@ const Chart = ({ symbol }) => {
   const toggleChartType = () => {
     setChartType((prevType) => (prevType === "line" ? "candlestick" : "line"));
   };
- while (isLoading) {
-    return (
-        <VStack gap="6" w="100%" h="85vh" p="6" bg="transparent" color="white" borderRadius="md">
-        <Box w="100%" h="80vh" align="center">
-          <HStack justify="center" align="start" w="100%">
-            <VStack gap="4" align="center" w="100%">
-              <HStack gap="4" align="center">
-                <TimeRangeSelector onTimeRangeChange={handleTimeRangeChange} />
-                <Button onClick={toggleChartType} colorPalette="red" variant="outline" p="5">
-                  {chartType === "line" ? <LuChartCandlestick /> : <FaChartLine />}
-                </Button>
-              </HStack>
-              <Loading />
-            </VStack>
-            <VStack gap="4" align="start" mt="16">
-              <DateRangeSelector onApply={handleDateRangeApply} />
-            </VStack>
-          </HStack>
-        </Box>
-      </VStack>
-    );
-  }
+
+  const spinner = (
+    <Center h="100%">
+      <Loading />
+    </Center>
+  );
+
   return (
-    <VStack gap="6" w="100%" h="100%" p="6" bg="transparent" color="white" borderRadius="md">
-      <Box w="100%" h="100%" align="center" bg="transparent">
-        <HStack justify="center" align="start" w="100%" bg="transparent">
-          <VStack gap="4" align="center" w="100%">
-            <HStack gap="4" align="center">
-              <TimeRangeSelector onTimeRangeChange={handleTimeRangeChange} />
-              <Button onClick={toggleChartType} colorPalette="red" variant="outline" p="5">
-                {chartType === "line" ? <LuChartCandlestick /> : <FaChartLine />}
-              </Button>
-            </HStack>
-            <ReactECharts  option={chartOptions} style={{ height: "720px", width: "70vw" }} />
-          </VStack>
-          <VStack gap="4" align="start" mt="16" bg="transparent">
-            <DateRangeSelector onApply={handleDateRangeApply}/>
-            {/* <MovingAvgForm onApply={handleMovingAvgApply} /> */}
-            <News />
-          </VStack>
-        </HStack>
-      </Box>
+    <VStack gap="6" w="100%" p="6" bg="transparent" color="white" borderRadius="md">
+      <Stack direction={{ base: "column", xl: "row" }} justify="center" align={{ base: "center", xl: "start" }} w="100%" gap="6">
+        <VStack gap="4" align="center" w={{ base: "100%", xl: "70vw" }}>
+          <HStack gap="4" align="center" wrap="wrap" justify="center">
+            <TimeRangeSelector active={timeRange} onTimeRangeChange={handleTimeRangeChange} />
+            <Button
+              onClick={toggleChartType}
+              colorPalette="red"
+              variant="outline"
+              p="5"
+              aria-label={chartType === "line" ? "Show candlestick chart" : "Show line chart"}
+            >
+              {chartType === "line" ? <LuChartCandlestick /> : <FaChartLine />}
+            </Button>
+          </HStack>
+          <Box w="100%" h={CHART_HEIGHT} position="relative" data-testid="chart">
+            {isLoading && stockData.length === 0 ? (
+              spinner
+            ) : (
+              <Suspense fallback={spinner}>
+                <Box h="100%" opacity={isLoading ? 0.5 : 1} transition="opacity 0.2s">
+                  <EChart option={chartOptions} style={{ height: "100%", width: "100%" }} />
+                </Box>
+              </Suspense>
+            )}
+          </Box>
+        </VStack>
+        <VStack gap="4" align="start" mt={{ base: 0, xl: "16" }} bg="transparent">
+          <DateRangeSelector onApply={handleDateRangeApply} />
+          <News />
+        </VStack>
+      </Stack>
     </VStack>
   );
 };

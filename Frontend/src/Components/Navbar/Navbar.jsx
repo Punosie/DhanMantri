@@ -1,30 +1,26 @@
 import { Box, Flex, HStack, Heading } from "@chakra-ui/react";
 import AuthButton from "../AuthButton";
-import { Avatar } from "../ui/avatar"; // Assuming Avatar component is properly set up
+import { Avatar } from "../ui/avatar";
 import { useAuth } from "../../Contexts/AuthContext";
 
 const Navbar = () => {
     const { currentUser, UserLoggedIn, photoURL } = useAuth();
 
     return (
-        <Box>
-            <Flex bg="transparent" w="100%" h="5vh" px="5" justifyContent="space-between" alignItems="center">
+        <Box as="header">
+            <Flex bg="transparent" w="100%" h="64px" px="5" justifyContent="space-between" alignItems="center" gap="4">
                 {/* Logo Container */}
-                <Box h="100%" w="auto">
-                    <Box h="100%" w="auto">
-                        <img src="assets/Logo.png" alt="DhanMantri Logo" style={{ height: "100%", width: "auto", objectFit: "cover" }} />
-                    </Box>
+                <Box h="100%" py="2" flexShrink={0}>
+                    <img src="/assets/logo-128.webp" alt="DhanMantri logo" width="48" height="48" style={{ height: "100%", width: "auto" }} />
                 </Box>
 
-                {/* Navigation Links */}
-                <HStack spacing="20px">
-                    <Heading size="3xl">STOCK DASHBOARD</Heading>
+                <HStack>
+                    <Heading as="h1" size={{ base: "lg", md: "3xl" }} textAlign="center">STOCK DASHBOARD</Heading>
                 </HStack>
 
                 {/* Sign-In Section */}
-                <HStack spacing="20px">
+                <HStack gap="5">
                     <AuthButton />
-                    {/* Conditional Avatar rendering */}
                     <Avatar
                         size="lg"
                         name={UserLoggedIn ? currentUser?.displayName || "Guest" : "Guest"}

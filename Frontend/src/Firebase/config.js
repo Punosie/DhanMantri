@@ -1,6 +1,3 @@
-import { initializeApp } from "firebase/app";
-import {getAuth} from "firebase/auth";
-
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: import.meta.env.VITE_AUTH_DOMAIN,
@@ -11,8 +8,15 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_MEASUREMENT_ID
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+export const firebaseEnabled = Boolean(firebaseConfig.apiKey && firebaseConfig.authDomain);
 
-export {app, auth};
+let authPromise;
+
+// Firebase is loaded on demand so it stays out of the initial bundle
+export const loadAuth = () =>
+  (authPromise ??= Promise.all([import("firebase/app"), import("firebase/auth")]).then(
+    ([{ initializeApp }, authModule]) => ({
+      ...authModule,
+      auth: authModule.getAuth(initializeApp(firebaseConfig)),
+    }),
+  ));

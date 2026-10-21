@@ -7,7 +7,10 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'), // Map '@' to the 'src' directory
+      '@': path.resolve(import.meta.dirname, './src'), // Map '@' to the 'src' directory
     },
+  },
+  build: {
+    target: 'es2022',
   },
 });

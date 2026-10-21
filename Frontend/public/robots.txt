@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://dhanmantri-shubhabha.vercel.app/sitemap.xml

@@ -1,12 +1,14 @@
 'use client'
 
-import { ChakraProvider, defaultSystem } from '@chakra-ui/react'
+import { ChakraProvider } from '@chakra-ui/react'
 import { ColorModeProvider } from './color-mode'
+import { system } from '../../theme'
 
+// The dashboard is designed for dark mode only
 export function Provider(props) {
   return (
-    <ChakraProvider value={defaultSystem}>
-      <ColorModeProvider {...props} />
+    <ChakraProvider value={system}>
+      <ColorModeProvider forcedTheme='dark' {...props} />
     </ChakraProvider>
   )
 }
