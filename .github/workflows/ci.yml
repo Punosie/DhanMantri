@@ -1,0 +1,82 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            Backend/package-lock.json
+            Frontend/package-lock.json
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+
+      - name: Backend
+        working-directory: Backend
+        run: |
+          npm ci
+          node --check index.js
+      - name: Frontend lint and build
+        working-directory: Frontend
+        run: |
+          npm ci
+          npm run lint
+          npm run build
+      - name: DataFetcher
+        working-directory: DataFetcher
+        run: |
+          pip install -r requirements.txt
+          python -m compileall -q src
+
+  e2e:
+    runs-on: ubuntu-latest
+    needs: build
+    services:
+      mongo:
+        image: mongo:8
+        ports: ["27017:27017"]
+    env:
+      MONGO_URL: mongodb://localhost:27017
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            Backend/package-lock.json
+            Frontend/package-lock.json
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+      - name: Seed MongoDB from Yahoo Finance
+        working-directory: DataFetcher/src
+        env:
+          FETCH_START: "2024-01-01"
+        run: |
+          pip install -r ../requirements.txt
+          python main.py
+      - run: npm ci
+        working-directory: Backend
+      - name: Playwright
+        working-directory: Frontend
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+          npx playwright test
+      - uses: actions/upload-artifact@v5
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: Frontend/playwright-report
+          retention-days: 14

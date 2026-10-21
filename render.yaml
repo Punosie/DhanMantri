@@ -1,0 +1,32 @@
+# Render Blueprint for the DhanMantri stock API (Express + MongoDB).
+# Matches the existing `dhanmantri-backend` web service; sync it from the
+# Render dashboard (Blueprints → New Blueprint Instance) to manage it as code.
+services:
+  - type: web
+    name: dhanmantri-backend
+    runtime: node
+    plan: free
+    rootDir: Backend
+    branch: main
+    autoDeploy: true
+    buildCommand: npm ci --omit=dev
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: NODE_ENV
+        value: production
+      - key: MONGO_URL
+        sync: false # set in the Render dashboard
+      - key: MONGO_DB
+        value: stockdata
+      - key: CORS_ORIGINS
+        value: https://dhanmantri-shubhabha.vercel.app,https://dhanmantri.onrender.com,http://localhost:5173
+      # Vercel preview deployments of this project
+      - key: CORS_ORIGIN_REGEX
+        value: ^https://dhanmantri-[a-z0-9-]*shubhabha\.vercel\.app$
+      - key: LOG_LEVEL
+        value: info
+      - key: LOG_DB_COMMANDS
+        value: "true"

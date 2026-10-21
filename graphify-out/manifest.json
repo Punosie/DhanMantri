@@ -1,0 +1,362 @@
+{
+  "Backend/config.js": {
+    "mtime": 1792608459.7325208,
+    "ast_hash": "6fd1dfeb8ca9efe2144776c5b0168e1a",
+    "semantic_hash": ""
+  },
+  "Backend/controller/stockController.js": {
+    "mtime": 1792608572.364676,
+    "ast_hash": "cf1f3dd92bb151df10cc2876f9707277",
+    "semantic_hash": ""
+  },
+  "Backend/db/db.js": {
+    "mtime": 1792609827.2342477,
+    "ast_hash": "c16c9a986305f9ffa5970655ab93f1de",
+    "semantic_hash": ""
+  },
+  "Backend/index.js": {
+    "mtime": 1792608573.3597522,
+    "ast_hash": "a8a1a317218fc0b3670d14dd94648c88",
+    "semantic_hash": ""
+  },
+  "Backend/logger.js": {
+    "mtime": 1792608604.4251385,
+    "ast_hash": "ef306c90a065db6fa34e3ccd021d797f",
+    "semantic_hash": ""
+  },
+  "Backend/package.json": {
+    "mtime": 1792608574.2384713,
+    "ast_hash": "880288865466d7299d1cdf27b67feeab",
+    "semantic_hash": ""
+  },
+  "Backend/routes/stockRoute.js": {
+    "mtime": 1792535740.0738266,
+    "ast_hash": "92cfb65ecbc051a97d234e8fc2e5ef86",
+    "semantic_hash": ""
+  },
+  "DataFetcher/src/__init__.py": {
+    "mtime": 1792535740.0814824,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": ""
+  },
+  "DataFetcher/src/config.py": {
+    "mtime": 1792608472.2166464,
+    "ast_hash": "729de34ba3841d93b6c0265d26c3248e",
+    "semantic_hash": ""
+  },
+  "DataFetcher/src/db.py": {
+    "mtime": 1792608374.639512,
+    "ast_hash": "fded9ebc86a402091b0545374e13db60",
+    "semantic_hash": ""
+  },
+  "DataFetcher/src/fetcher.py": {
+    "mtime": 1792608542.7213235,
+    "ast_hash": "ae94802911fe8162b81922e8e4bb185d",
+    "semantic_hash": ""
+  },
+  "DataFetcher/src/main.py": {
+    "mtime": 1792608542.561572,
+    "ast_hash": "7528731df8be3537e8be30cc633e0250",
+    "semantic_hash": ""
+  },
+  "Frontend/e2e/api.spec.js": {
+    "mtime": 1792609240.708575,
+    "ast_hash": "317f93ac4fa8c6407b8849c028d76646",
+    "semantic_hash": ""
+  },
+  "Frontend/e2e/dashboard.spec.js": {
+    "mtime": 1792609248.1960394,
+    "ast_hash": "840f6c8c8425aee7e73bfee85679e6b1",
+    "semantic_hash": ""
+  },
+  "Frontend/e2e/seo-performance.spec.js": {
+    "mtime": 1792609510.7316165,
+    "ast_hash": "833de6c214f8539bb3911ed26f1f4d08",
+    "semantic_hash": ""
+  },
+  "Frontend/eslint.config.js": {
+    "mtime": 1792609448.6695497,
+    "ast_hash": "089d8f6f2b25334ccf83aacdbab02431",
+    "semantic_hash": ""
+  },
+  "Frontend/package.json": {
+    "mtime": 1792609103.3165681,
+    "ast_hash": "33f442bca8dc720e37fc5d5a5bfd07e6",
+    "semantic_hash": ""
+  },
+  "Frontend/playwright.config.js": {
+    "mtime": 1792609515.5130165,
+    "ast_hash": "8348e2c28a96657e5c5b4451258e0a1c",
+    "semantic_hash": ""
+  },
+  "Frontend/src/App.jsx": {
+    "mtime": 1792609074.759178,
+    "ast_hash": "f4aa1813323e8ad0c7576f5e6cf466d8",
+    "semantic_hash": ""
+  },
+  "Frontend/src/Components/AuthButton.jsx": {
+    "mtime": 1792609074.3397431,
+    "ast_hash": "7da928887194f89fa6348f352bc67071",
+    "semantic_hash": ""
+  },
+  "Frontend/src/Components/Chart/Chart.jsx": {
+    "mtime": 1792609193.9818263,
+    "ast_hash": "e1b7ed270012f6fb66819bedf9c4b5fa",
+    "semantic_hash": ""
+  },
+  "Frontend/src/Components/Chart/ChartOptions.jsx": {
+    "mtime": 1792609662.310892,
+    "ast_hash": "841cec29ae3743c919c8b9a127e74c19",
+    "semantic_hash": ""
+  },
+  "Frontend/src/Components/Chart/EChart.jsx": {
+    "mtime": 1792609355.576126,
+    "ast_hash": "9dec7bb6aceb3aca1d91b8812b80513a",
+    "semantic_hash": ""
+  },
+  "Frontend/src/Components/DateRangeSelector.jsx": {
+    "mtime": 1792609074.545014,
+    "ast_hash": "9ddc8e0837403e6465833727d6de47f8",
+    "semantic_hash": ""
+  },
+  "Frontend/src/Components/Footer.jsx": {
+    "mtime": 1792609074.4369447,
+    "ast_hash": "8da3569de18dcf8d242d30b5cef07b78",
+    "semantic_hash": ""
+  },
+  "Frontend/src/Components/Loading.jsx": {
+    "mtime": 1792535740.1141593,
+    "ast_hash": "47ea8b17c423534a538e9e16502a4c08",
+    "semantic_hash": ""
+  },
+  "Frontend/src/Components/Navbar/Navbar.jsx": {
+    "mtime": 1792609074.1158214,
+    "ast_hash": "a9626adee9b36c29304b491bb3354213",
+    "semantic_hash": ""
+  },
+  "Frontend/src/Components/News/News.jsx": {
+    "mtime": 1792609073.9841666,
+    "ast_hash": "12db6aa9f818eb60cf8fcc565ac3f7b8",
+    "semantic_hash": ""
+  },
+  "Frontend/src/Components/Search.jsx": {
+    "mtime": 1792609074.2288394,
+    "ast_hash": "f637361282ce5bd4e4327b6f09d5ffb9",
+    "semantic_hash": ""
+  },
+  "Frontend/src/Components/TimeRangeSelector.jsx": {
+    "mtime": 1792609074.6439629,
+    "ast_hash": "ba62909e570facc6ad11d417b7faa260",
+    "semantic_hash": ""
+  },
+  "Frontend/src/Components/ui/avatar.jsx": {
+    "mtime": 1792535740.1249738,
+    "ast_hash": "1d09447a8dad1cc3d4296c32379a0ea8",
+    "semantic_hash": ""
+  },
+  "Frontend/src/Components/ui/button.jsx": {
+    "mtime": 1792535740.1259735,
+    "ast_hash": "6b6a1958df1fc6f01bf3e767232b84b7",
+    "semantic_hash": ""
+  },
+  "Frontend/src/Components/ui/color-mode.jsx": {
+    "mtime": 1792535740.1274803,
+    "ast_hash": "7e9c3a21650e15876641e9a6e4e91cda",
+    "semantic_hash": ""
+  },
+  "Frontend/src/Components/ui/field.jsx": {
+    "mtime": 1792535740.130099,
+    "ast_hash": "bdb4b896d510458ab1b989a833b49158",
+    "semantic_hash": ""
+  },
+  "Frontend/src/Components/ui/provider.jsx": {
+    "mtime": 1792609607.3728657,
+    "ast_hash": "6c609a185a0c6ffd434223ce900d1d1c",
+    "semantic_hash": ""
+  },
+  "Frontend/src/Components/ui/toaster.jsx": {
+    "mtime": 1792535740.1338382,
+    "ast_hash": "eff7267576b744700a5a1db3fe6fa878",
+    "semantic_hash": ""
+  },
+  "Frontend/src/Contexts/AuthContext/index.jsx": {
+    "mtime": 1792609073.4031587,
+    "ast_hash": "183b8a3f2913d81e81eea79acad6a91f",
+    "semantic_hash": ""
+  },
+  "Frontend/src/Firebase/auth.js": {
+    "mtime": 1792609073.2778115,
+    "ast_hash": "f936545a207726d066c73358d2c67cf1",
+    "semantic_hash": ""
+  },
+  "Frontend/src/Firebase/config.js": {
+    "mtime": 1792609073.1672575,
+    "ast_hash": "b0f1b15803775aa858a74f0db97b82d7",
+    "semantic_hash": ""
+  },
+  "Frontend/src/Services/StockService.jsx": {
+    "mtime": 1792609072.6561646,
+    "ast_hash": "2571c4fd537e5de991df7553dcd1d54d",
+    "semantic_hash": ""
+  },
+  "Frontend/src/Utils/movingAvgCalculator.js": {
+    "mtime": 1792609072.9365635,
+    "ast_hash": "1f1b2e7489b3f5d4dd60695e02e512a9",
+    "semantic_hash": ""
+  },
+  "Frontend/src/Utils/news.js": {
+    "mtime": 1792609073.0467937,
+    "ast_hash": "725ea02402d1da28913bcc75027b0455",
+    "semantic_hash": ""
+  },
+  "Frontend/src/Utils/stocks.js": {
+    "mtime": 1792609072.8106427,
+    "ast_hash": "9aae97d6a088a1051d726f62451d6af3",
+    "semantic_hash": ""
+  },
+  "Frontend/src/lib/VercelInsights.jsx": {
+    "mtime": 1792609074.957093,
+    "ast_hash": "80622ab608a8a7aab977e0c68078ab31",
+    "semantic_hash": ""
+  },
+  "Frontend/src/lib/http.js": {
+    "mtime": 1792609374.6998274,
+    "ast_hash": "64f7f87e410188758c9e5f6bc3bb1cbf",
+    "semantic_hash": ""
+  },
+  "Frontend/src/main.jsx": {
+    "mtime": 1792609374.5671227,
+    "ast_hash": "e52867de57ee16e4221c110a74f5724e",
+    "semantic_hash": ""
+  },
+  "Frontend/src/theme.js": {
+    "mtime": 1792609607.2585368,
+    "ast_hash": "346f6018f061296ff848ed2a8e02d551",
+    "semantic_hash": ""
+  },
+  "Frontend/vercel.json": {
+    "mtime": 1792609173.5193918,
+    "ast_hash": "97185dae2553c292c276bd863f489448",
+    "semantic_hash": ""
+  },
+  "Frontend/vite.config.js": {
+    "mtime": 1792609194.0908718,
+    "ast_hash": "35d503937169f6aa026f916298c84baa",
+    "semantic_hash": ""
+  },
+  ".github/workflows/ci.yml": {
+    "mtime": 1792609692.5454082,
+    "ast_hash": "34f48ccdde20734f05d625d9b0c70f21",
+    "semantic_hash": ""
+  },
+  ".github/workflows/fetch-data.yml": {
+    "mtime": 1792609692.572798,
+    "ast_hash": "6ca90214bdbf91e69d6b6ff84d05772d",
+    "semantic_hash": ""
+  },
+  "Backend/readme.md": {
+    "mtime": 1792609760.5871258,
+    "ast_hash": "2d9177df1394856497d161e9e2bfc480",
+    "semantic_hash": ""
+  },
+  "DataFetcher/readme.md": {
+    "mtime": 1792609760.806779,
+    "ast_hash": "0501a4e6cf5ffb91c42cdecd6e47012f",
+    "semantic_hash": ""
+  },
+  "DataFetcher/requirements.txt": {
+    "mtime": 1792608306.3164725,
+    "ast_hash": "d56d24c0066b42ca0ba6bde108c54abf",
+    "semantic_hash": ""
+  },
+  "Frontend/README.md": {
+    "mtime": 1792609738.4736798,
+    "ast_hash": "3fd1a901438315abf1f1c9f1deecf6f8",
+    "semantic_hash": ""
+  },
+  "Frontend/index.html": {
+    "mtime": 1792609102.893005,
+    "ast_hash": "10b5dc8be915f0f15b53571883dda2f4",
+    "semantic_hash": ""
+  },
+  "Frontend/public/robots.txt": {
+    "mtime": 1792609173.472408,
+    "ast_hash": "23860b49e9657b4c938308e09f4f944c",
+    "semantic_hash": ""
+  },
+  "License.md": {
+    "mtime": 1792535740.1472888,
+    "ast_hash": "2258f3748254402164e5305745c935ae",
+    "semantic_hash": ""
+  },
+  "README.md": {
+    "mtime": 1792609738.1955745,
+    "ast_hash": "9135280e91d76d848e5982591954b0d1",
+    "semantic_hash": ""
+  },
+  "render.yaml": {
+    "mtime": 1792609698.5946264,
+    "ast_hash": "655bd85cb86f866c398d95c0b3c6c1df",
+    "semantic_hash": ""
+  },
+  "Analytics.png": {
+    "mtime": 1792535740.0598972,
+    "ast_hash": "e396c970300d9b074c47ace5d27a26e2",
+    "semantic_hash": ""
+  },
+  "Dashboard.png": {
+    "mtime": 1792535740.075826,
+    "ast_hash": "193976f732bbe6a6d7eba3d13b0f8852",
+    "semantic_hash": ""
+  },
+  "Frontend/public/apple-touch-icon.png": {
+    "mtime": 1792609158.2180204,
+    "ast_hash": "07ebe04c28587c88e5e866a680cfdc50",
+    "semantic_hash": ""
+  },
+  "Frontend/public/assets/Avatar.png": {
+    "mtime": 1792609158.5936072,
+    "ast_hash": "d8b93ec6ffc598a2c73ff9b67e643c14",
+    "semantic_hash": ""
+  },
+  "Frontend/public/assets/Logo.png": {
+    "mtime": 1792535740.1065018,
+    "ast_hash": "d5d7979bf9206dd96102562b523448df",
+    "semantic_hash": ""
+  },
+  "Frontend/public/assets/logo-128.webp": {
+    "mtime": 1792609158.5798962,
+    "ast_hash": "cf0d9138e8ac77c8404cb44502ec5a2b",
+    "semantic_hash": ""
+  },
+  "Frontend/public/favicon.svg": {
+    "mtime": 1792609158.2365613,
+    "ast_hash": "6e14298748e899bc900dced3d2516600",
+    "semantic_hash": ""
+  },
+  "Frontend/public/icon-192.png": {
+    "mtime": 1792609158.2000875,
+    "ast_hash": "b9cdcd650f0a68f516ddf3c6285c8b68",
+    "semantic_hash": ""
+  },
+  "Frontend/public/icon-512.png": {
+    "mtime": 1792609158.194085,
+    "ast_hash": "ef59b979ce426073ca0efc21d6f58eed",
+    "semantic_hash": ""
+  },
+  "Frontend/public/icon-maskable-512.png": {
+    "mtime": 1792609158.2140203,
+    "ast_hash": "fa46fa6c7aea68e1eba8669229a89517",
+    "semantic_hash": ""
+  },
+  "Frontend/public/og-image.png": {
+    "mtime": 1792609158.6349232,
+    "ast_hash": "309d07b6e6a9ce63d8d0ba473167df2b",
+    "semantic_hash": ""
+  },
+  "CLAUDE.md": {
+    "mtime": 1792609769.7902782,
+    "ast_hash": "8a6643a420fdad6bfb583523bc6cef16",
+    "semantic_hash": ""
+  }
+}
