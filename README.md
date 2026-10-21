@@ -2,7 +2,7 @@
 
 ![Dashboard](Dashboard.png)
 
-[![Live App](https://img.shields.io/badge/Live-dhanmantri--shubhabha.vercel.app-000?logo=vercel)](https://dhanmantri-shubhabha.vercel.app/)
+[![Live App](https://img.shields.io/badge/Live-dhanmantri--app.vercel.app-000?logo=vercel)](https://dhanmantri-app.vercel.app/)
 [![API](https://img.shields.io/badge/API-Render-46E3B7?logo=render&logoColor=000)](https://dhanmantri-backend.onrender.com/health)
 [![CI](https://github.com/Punosie/DhanMantri/actions/workflows/ci.yml/badge.svg)](https://github.com/Punosie/DhanMantri/actions/workflows/ci.yml)
 
@@ -111,7 +111,7 @@ The suite needs MongoDB with data (step 1 above). It covers API validation and c
 2. Set `MONGO_URL` in the service's Environment tab. The other variables come from `render.yaml`.
 3. Pushes to `main` deploy automatically. `/health` returns 503 when MongoDB is unreachable.
 
-**Frontend → Vercel** (project `dhanmantri`, root directory `Frontend`)
+**Frontend → Vercel** (project `dhanmantri`, root directory `Frontend`, production domain `dhanmantri-app.vercel.app`)
 1. `vercel link` inside `Frontend/`, or import the repo with *Root Directory* `Frontend`.
 2. Add any `VITE_*` variables you need (Firebase, Finnhub, and `VITE_API_URL` if the API URL changes).
 3. `vercel --prod`, or push to `main` once the Git integration is connected.

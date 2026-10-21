@@ -1,6 +1,6 @@
 # DhanMantri Frontend
 
-React 19 + Vite 8 single-page app for [DhanMantri](https://dhanmantri-shubhabha.vercel.app/). Pick a NIFTY 50 stock to see a line or candlestick chart with 50/100/200-day moving averages, a time or custom date range, and market news.
+React 19 + Vite 8 single-page app for [DhanMantri](https://dhanmantri-app.vercel.app/). Pick a NIFTY 50 stock to see a line or candlestick chart with 50/100/200-day moving averages, a time or custom date range, and market news.
 
 ## Scripts
 

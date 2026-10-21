@@ -22,7 +22,7 @@ services:
       - key: MONGO_DB
         value: stockdata
       - key: CORS_ORIGINS
-        value: https://dhanmantri-shubhabha.vercel.app,https://dhanmantri.onrender.com,http://localhost:5173
+        value: https://dhanmantri-app.vercel.app,https://dhanmantri-eight.vercel.app,https://dhanmantri.onrender.com,http://localhost:5173
       # Vercel preview deployments of this project
       - key: CORS_ORIGIN_REGEX
         value: ^https://dhanmantri-[a-z0-9-]*shubhabha\.vercel\.app$
