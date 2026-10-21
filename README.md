@@ -32,7 +32,7 @@ Yahoo Finance ──► DataFetcher (Python 3.14) ──► MongoDB Atlas ◄─
 
 ## Local setup
 
-Prerequisites: Node.js 22.12+, Python 3.14 (with [uv](https://docs.astral.sh/uv/) or pip), and MongoDB (Atlas, or local via `docker run -d -p 27017:27017 --name dhanmantri-mongo mongo:8`).
+Prerequisites: Node.js 22.12+, Python 3.14 (with [uv](https://docs.astral.sh/uv/) or pip), and MongoDB (Atlas, or local via `docker run -d -p 27017:27017 --name dhanmantri-mongo mongo:8`; on Linux kernel 6.19+ use `mongo:7.0`, since MongoDB 8 refuses to start there, see [SERVER-121912](https://jira.mongodb.org/browse/SERVER-121912)).
 
 ```bash
 # 1. Load stock data

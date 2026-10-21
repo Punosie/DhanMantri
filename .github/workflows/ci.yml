@@ -43,8 +43,16 @@ jobs:
     needs: build
     services:
       mongo:
-        image: mongo:8
+        # MongoDB 8.x refuses to start on Linux 6.19+ (SERVER-121912), which the
+        # ubuntu-latest runners now ship; 7.0 is unaffected and fine for test data.
+        image: mongo:7.0
         ports: ["27017:27017"]
+        # Fail fast in "Initialize containers" if mongod is not accepting connections
+        options: >-
+          --health-cmd "mongosh --quiet --eval 'db.runCommand({ ping: 1 }).ok'"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
     env:
       MONGO_URL: mongodb://localhost:27017
     steps:
