@@ -65,8 +65,9 @@ The first DataFetcher run backfills from `FETCH_START` (default 2015-01-01); lat
 | `MONGO_URL` | required | MongoDB connection string |
 | `MONGO_DB` / `MONGO_COLLECTION` | `stockdata` / `STOCKS` | Database and collection |
 | `PORT` | `5000` | HTTP port |
-| `CORS_ORIGINS` | empty (any origin) | Comma-separated allowed origins |
-| `CORS_ORIGIN_REGEX` | empty | Extra allowed origins, e.g. Vercel previews |
+| `CORS_ORIGINS` | deployed frontends + localhost | Comma-separated allowed origins |
+| `CORS_ORIGIN_REGEX` | dhanmantri Vercel previews | Extra allowed origins as a regex |
+| `RATE_LIMIT_PER_MINUTE` | `300` | Stock API requests per minute per IP |
 | `LOG_LEVEL` | `info` | `debug` also logs health checks and pings |
 | `LOG_PRETTY` | `true` in a terminal | Human-readable logs instead of JSON |
 | `LOG_DB_COMMANDS` | `true` | Log every outgoing MongoDB command with latency |

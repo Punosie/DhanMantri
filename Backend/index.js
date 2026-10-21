@@ -12,11 +12,10 @@ const app = express();
 // Render terminates TLS in front of the app
 app.set('trust proxy', 1);
 
-const corsOrigin = config.CORS_ORIGINS.length || config.CORS_ORIGIN_REGEX
-    ? (origin, callback) => callback(null, !origin
-        || config.CORS_ORIGINS.includes(origin)
-        || Boolean(config.CORS_ORIGIN_REGEX?.test(origin)))
-    : true;
+// Requests without an Origin (curl, server-to-server, health checks) are not CORS requests
+const corsOrigin = (origin, callback) => callback(null, !origin
+    || config.CORS_ORIGINS.includes(origin)
+    || config.CORS_ORIGIN_REGEX.test(origin));
 
 app.use(httpLogger);
 app.use(withRequestContext);
