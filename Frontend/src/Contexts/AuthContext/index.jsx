@@ -1,46 +1,43 @@
 import { createContext, useEffect, useState, useContext } from "react";
-import { auth } from "../../Firebase/config.js";
-import { onAuthStateChanged } from "firebase/auth";
+import { firebaseEnabled, loadAuth } from "../../Firebase/config.js";
 
 const AuthContext = createContext();
 
+// Start Firebase once the page is idle so it never delays the first paint
+const whenIdle = (callback) =>
+    window.requestIdleCallback ? window.requestIdleCallback(callback, { timeout: 2000 }) : setTimeout(callback, 200);
+
 export function AuthProvider({ children }) {
-    const [currentUser, setCurrentUser] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [UserLoggedIn, setUserLoggedIn] = useState(false);
-    const [photoURL, setPhotoURL] = useState(null);
+    const [state, setState] = useState({ currentUser: null, loading: firebaseEnabled });
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, initialiseUser);
-        return unsubscribe;
+        if (!firebaseEnabled) return;
+        let unsubscribe = () => {};
+        let cancelled = false;
+        whenIdle(() =>
+            loadAuth().then(({ auth, onAuthStateChanged }) => {
+                if (cancelled) return;
+                unsubscribe = onAuthStateChanged(auth, (user) => setState({ currentUser: user, loading: false }));
+            }),
+        );
+        return () => {
+            cancelled = true;
+            unsubscribe();
+        };
     }, []);
 
-    async function initialiseUser(user) {
-        if (user) {
-            setCurrentUser({ ...user });
-            setPhotoURL(user.photoURL);
-            setUserLoggedIn(true);
-        } else {
-            setCurrentUser(null);
-            setUserLoggedIn(false);
-        }
-        setLoading(false);
-    }
-
     const value = {
-        currentUser,
-        UserLoggedIn,
-        loading,
-        photoURL,
+        currentUser: state.currentUser,
+        UserLoggedIn: Boolean(state.currentUser),
+        loading: state.loading,
+        photoURL: state.currentUser?.photoURL ?? null,
+        enabled: firebaseEnabled,
     };
 
-    return (
-        <AuthContext.Provider value={value}>
-            {!loading && children}
-        </AuthContext.Provider>
-    );
+    return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => {
     return useContext(AuthContext);
 };

@@ -1,37 +1,47 @@
-import { useState} from 'react';
+import { useEffect, useState } from 'react';
 import Chart from './Components/Chart/Chart';
 import { Box } from "@chakra-ui/react"
 import Navbar from './Components/Navbar/Navbar';
 import Search from './Components/Search';
-import symbols from './Utils/stocks';
+import symbols, { symbolLabel } from './Utils/stocks';
 import Footer from './Components/Footer';
 
-const App = () => {
-  // Retrieve selected stock symbol from localStorage
-  if (!localStorage.getItem('selectedStock')) {
-    localStorage.setItem('selectedStock', symbols[0]);
+// Retrieve selected stock symbol from localStorage, ignoring symbols no longer listed
+const savedSymbol = () => {
+  try {
+    const saved = localStorage.getItem('selectedStock');
+    return symbols.includes(saved) ? saved : symbols[0];
+  } catch {
+    return symbols[0];
   }
-  const savedStock = localStorage.getItem('selectedStock') || symbols[0]; // Default to first symbol if none is saved
+};
 
-  const [selectedSymbol, setSelectedSymbol] = useState(savedStock); // Initialize with saved symbol
+const App = () => {
+  const [selectedSymbol, setSelectedSymbol] = useState(savedSymbol);
 
   // Handler for changing selected symbol
   const handleSymbolChange = (newSymbol) => {
     setSelectedSymbol(newSymbol);
-    localStorage.setItem('selectedStock', newSymbol); // Save the selected symbol to localStorage
+    try {
+      localStorage.setItem('selectedStock', newSymbol);
+    } catch {
+      // storage unavailable
+    }
   };
+
+  // Per-stock title for browser tabs, history and shared links
+  useEffect(() => {
+    document.title = `${symbolLabel(selectedSymbol)} Stock Chart & Moving Averages | DhanMantri`;
+  }, [selectedSymbol]);
 
   return (
     <>
       <Navbar />
-      <Box width={"1/6"} mx="auto" mt="10">
-        {/* Use the Search component */}
-        <Search selectedSymbol={selectedSymbol} onSymbolChange={handleSymbolChange} />
-      </Box>  
-      <Box >
-        <Box >
-          <Chart symbol={selectedSymbol} />
+      <Box as="main">
+        <Box width={{ base: "90%", md: "320px" }} mx="auto" mt="10">
+          <Search selectedSymbol={selectedSymbol} onSymbolChange={handleSymbolChange} />
         </Box>
+        <Chart symbol={selectedSymbol} />
       </Box>
       <Footer />
     </>

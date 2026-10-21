@@ -9,6 +9,7 @@ lerna-debug.log*
 
 node_modules
 dist
+dist-e2e
 dist-ssr
 *.local
 
@@ -23,4 +24,17 @@ dist-ssr
 *.sln
 *.sw?
 
-*.env
+*.env.env
+.env.*
+!.env.example
+.vercel
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+.vercel
+.env*
+!.env.example

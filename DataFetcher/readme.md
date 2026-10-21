@@ -1,65 +1,45 @@
 # 📊 Stock Data Fetcher and Database Inserter 🚀
 
-This project is designed to fetch historical stock data (OHLCV) for NIFTY50 and selected global stocks from Yahoo Finance and store it in a MongoDB database.
+Fetches daily OHLCV candles for NIFTY 50 constituents, the NIFTY 50 index (`^NSEI`) and a few US stocks from Yahoo Finance, and upserts them into MongoDB for the [backend](../Backend).
 
 ## Project Structure
 
-- **config.py**: Contains configuration settings such as MongoDB connection details and NIFTY50 stock symbols.
-- **db.py**: Contains functions for interacting with the MongoDB database (inserting and clearing data).
-- **fetcher.py**: Contains functions for fetching stock data from Yahoo Finance using the `yfinance` library.
-- **main.py**: Main script to fetch the stock data and insert it into the database.
+- **config.py**: settings from `.env` and the list of symbols (keep it in sync with `Frontend/src/Utils/stocks.js`)
+- **db.py**: MongoDB access: latest stored date per symbol, idempotent bulk upserts on `(Symbol, Date)`, and command logging
+- **fetcher.py**: Yahoo Finance download with timing logs
+- **main.py**: the incremental fetch loop
 
 ## Prerequisites
 
-1. Python 3.x
-2. MongoDB instance (MongoDB Atlas recommended)
-3. Dependencies (listed in `requirements.txt`)
+1. Python 3.14
+2. A MongoDB instance (MongoDB Atlas, or local `docker run -d -p 27017:27017 mongo:8`)
 
 ## 🔧 Setup Instructions
 
-### Step 1: Install Dependencies
-
-Create a virtual environment and install the required dependencies.
-
 ```bash
-# Create virtual environment
-python -m venv venv
+# Create a Python 3.14 virtual environment and install dependencies
+uv venv --python 3.14
+uv pip install -r requirements.txt
+# or: py -3.14 -m venv .venv && .venv\Scripts\pip install -r requirements.txt
 
-# Activate the virtual environment
-# On Windows
-venv\Scripts\activate
-# On Mac/Linux
-source venv/bin/activate
+cp .env.example .env   # set MONGO_URL
 
-# Install the required libraries
-pip install -r requirements.txt
+cd src
+../.venv/Scripts/python main.py     # macOS/Linux: ../.venv/bin/python main.py
 ```
 
-### Step 2: Set Up MongoDB 🗄️
+| Variable | Default | Purpose |
+| --- | --- | --- |
+| `MONGO_URL` | required | MongoDB connection string |
+| `MONGO_DB` / `MONGO_COLLECTION` | `stockdata` / `STOCKS` | Where candles are stored |
+| `FETCH_START` | `2015-01-01` | Backfill start for symbols with no data yet |
+| `LOG_LEVEL` | `INFO` | `DEBUG` also logs every Yahoo Finance HTTP request and MongoDB command |
 
-- If you don’t already have a MongoDB account, sign up at MongoDB Atlas. 🌍
-- Create a new cluster and get the connection string. 🔑
-- Replace the MONGO_URL in the .env file with your MongoDB connection string (replace the username, password, and database name accordingly).
-- Example .env file:
+## How it works
 
-```env
-MONGO_URL=mongodb+srv://username:password@cluster0.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
-```
+- For each symbol it looks up the newest stored candle and fetches only from the following day, so the first run backfills and later runs are incremental.
+- Rows are upserted on `(Symbol, Date)`, so running it twice never creates duplicates.
+- Symbols with no new data (weekends, holidays, delisted tickers) are logged and skipped.
+- The `Fetch stock data` GitHub Action runs it on weekdays after market close. It needs the `MONGO_URL` repository secret.
 
-### Step 3: Run the Script ▶️
-
-Once your environment is set up, you can run the main.py script to fetch stock data and insert it into your MongoDB database
-
-```bash
-python main.py
-```
-
-### Step 4: (Optional) Clear Database 🧹
-
-If you want to clear all the data in the collection, you can call the clear_database() function in the db.py file. Uncomment the line in main.py to clear the database before inserting new records.
-
-## NOTES
-
-- Ensure that MongoDB Atlas (or your MongoDB server) is properly set up and accessible.
-- The `yfinance` library fetches historical OHLCV data for the given stock symbols from Yahoo Finance.
-- If any stock symbol fails to fetch data, it will print a warning message and move on to the next symbol.
+To wipe the collection, call `clear_database()` from `db.py`.

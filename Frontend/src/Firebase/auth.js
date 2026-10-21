@@ -1,22 +1,11 @@
-import { auth } from "./config.js";
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { loadAuth } from "./config.js";
 
 export const doSignInWithGoogle = async () => {
-    try {
-        const provider = new GoogleAuthProvider();
-        const result = await signInWithPopup(auth, provider);
-        console.log(result);
-        return result;
-    } catch (error) {
-        console.error("Sign-in failed:", error);
-        throw error;
-    }
+    const { auth, GoogleAuthProvider, signInWithPopup } = await loadAuth();
+    return signInWithPopup(auth, new GoogleAuthProvider());
 };
 
 export const doSignOut = async () => {
-    try {
-        await auth.signOut();
-    } catch (error) {
-        console.error("Sign-out failed:", error);
-    }
+    const { auth, signOut } = await loadAuth();
+    await signOut(auth);
 };

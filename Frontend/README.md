@@ -1,54 +1,33 @@
-# 📈 Stock Dashboard
+# DhanMantri Frontend
 
-A stock dashboard that allows users to select a stock symbol from a list of NIFTY50 stocks and view related data in a chart. The app is built using React and Chakra UI for styling.
+React 19 + Vite 8 single-page app for [DhanMantri](https://dhanmantri-app.vercel.app/). Pick a NIFTY 50 stock to see a line or candlestick chart with 50/100/200-day moving averages, a time or custom date range, and market news.
 
-## ✨ Features
+## Scripts
 
-- **Select stock symbols** from a dropdown (NIFTY50 stocks).
-- **View stock data** displayed in a chart (using the `Chart` component).
-- The app is **styled using Chakra UI**, making it modular and responsive.
+| Command | What it does |
+| --- | --- |
+| `npm run dev` | Dev server on http://localhost:5173 (API defaults to http://localhost:5000) |
+| `npm run build` | Production build into `dist/` |
+| `npm run preview` | Serve the production build |
+| `npm run lint` | ESLint |
+| `npm run test:e2e` | Playwright end-to-end tests (`e2e/`), which build the app and start the API |
 
-## 📦 Dependencies
+## Configuration
 
-- React: JavaScript library for building user interfaces.
-- Chakra UI: A modular and accessible component library that provides easy-to-use UI elements.
-- React Select: A flexible and customizable dropdown component.
+Copy `.env.example` to `.env`. Every variable is optional:
 
-## 🛠️ Tech Stack
+| Variable | Description |
+| --- | --- |
+| `VITE_API_URL` | Backend base URL |
+| `VITE_LOG_REQUESTS` | `false` disables request/response logging in the console |
+| `VITE_FINNHUB_API_KEY` | Finnhub key for the news panel (hidden when empty) |
+| `VITE_FIREBASE_*`, `VITE_AUTH_DOMAIN`, `VITE_PROJECT_ID`, … | Firebase web config for Google sign-in (disabled when empty) |
 
-The application uses the following technologies:
+## Structure
 
-- **React**: A JavaScript library for building user interfaces.
-- **Chakra UI**: A modular and accessible component library that provides easy-to-use UI elements.
-- **ECharts-for-React**: A flexible library for rendering interactive charts.
-
-## 🔧 Installation Instructions
-
-Follow these steps to set up and run the project locally:
-
-### Step 1: Install Dependencies
-
-Ensure that you have **Node.js** and **npm** or **Yarn** installed. If not, please install them from the official websites:
-
-- [Node.js](https://nodejs.org/)
-- [npm](https://npmjs.com/) or [Yarn](https://yarnpkg.com/)
-
-### Step 2: Start the Development Server
-
-This project uses **Vite** for fast development and build process. To start the development server, run:
-
-```bash
-npm run dev
-```
-
-## Usage
-
-1. Open the app in your browser.
-2. Select a stock symbol from the dropdown list.
-3. View the stock data in an interactive chart displayed below the dropdown.
-
-The stock symbols include a combination of popular NIFTY50 stocks and global stock symbols. The chart will update dynamically based on your selection.
-
-## Contributing 🤝
-
-If you'd like to contribute, feel free to fork the repository and submit a pull request with your changes. Ensure you follow good coding practices and write tests if applicable.
+- `src/lib/http.js`: axios clients that log every outgoing request and its response, with latency and the backend request ID
+- `src/Services/StockService.jsx`: stock data API
+- `src/Components/Chart/`: chart, option builder and the lazily loaded, tree-shaken ECharts wrapper
+- `src/theme.js`: Chakra system with only the component recipes in use
+- `public/`: favicons, manifest, `robots.txt`, `sitemap.xml`, OG image
+- `vercel.json`: SPA rewrites, immutable asset caching and security headers

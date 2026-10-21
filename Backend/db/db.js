@@ -1,19 +1,55 @@
-// db.js
-require('dotenv').config();
-const mongoose = require('mongoose');
+const { MongoClient } = require('mongodb');
+const { MONGO_URL, MONGO_DB, MONGO_COLLECTION, LOG_DB_COMMANDS } = require('../config');
+const { logger, requestContext } = require('../logger');
 
-const MONGO_URL = process.env.MONGO_URL;
-console.log(MONGO_URL);   
+let client;
 
-const db = async () => {
-    try { 
-        mongoose.set('strictQuery', false);
-        // Replace your connection string with process.env.MONGO_URL for better practice
-        await mongoose.connect(MONGO_URL, { dbName: 'stockdata' });
-        console.log('Connected to the database');
-    } catch (error) {
-        console.log('Error connecting to the database', error);
+// Logs every outgoing MongoDB command with its latency and the request that caused it
+const logCommands = (mongo) => {
+    const log = logger.child({ component: 'mongodb' });
+    const reqId = () => requestContext.getStore()?.id;
+    mongo.on('commandSucceeded', (e) => {
+        const level = e.commandName === 'ping' ? 'debug' : 'info';
+        log[level]({ reqId: reqId(), command: e.commandName, ms: e.duration }, `mongo ${e.commandName} ok ${Math.round(e.duration)}ms`);
+    });
+    mongo.on('commandFailed', (e) => {
+        log.error({ reqId: reqId(), command: e.commandName, ms: e.duration, err: e.failure }, `mongo ${e.commandName} failed`);
+    });
+};
+
+const connect = async () => {
+    if (!MONGO_URL) throw new Error('MONGO_URL is not configured');
+    client = new MongoClient(MONGO_URL, {
+        monitorCommands: LOG_DB_COMMANDS,
+        serverSelectionTimeoutMS: 15000,
+        maxPoolSize: 10,
+        // Keep warm connections so bursts of requests skip the TCP/TLS handshake
+        minPoolSize: 3,
+    });
+    if (LOG_DB_COMMANDS) logCommands(client);
+    await client.connect();
+    await client.db(MONGO_DB).command({ ping: 1 });
+    logger.info({ db: MONGO_DB }, 'Connected to the database');
+
+    // Every query filters on Symbol and a Date range; same spec the DataFetcher creates
+    try {
+        await stocks().createIndex({ Symbol: 1, Date: 1 });
+    } catch (err) {
+        logger.warn({ err }, 'Could not ensure the Symbol/Date index');
     }
 };
 
-module.exports = db;
+const stocks = () => client.db(MONGO_DB).collection(MONGO_COLLECTION);
+
+const ping = async () => {
+    try {
+        await client.db(MONGO_DB).command({ ping: 1 }, { timeoutMS: 2000 });
+        return true;
+    } catch {
+        return false;
+    }
+};
+
+const close = () => client?.close();
+
+module.exports = { connect, stocks, ping, close };

@@ -1,63 +1,41 @@
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
-import nifty50Symbols from "../Utils/stocks";
-import { grey, teal } from '@mui/material/colors';
+import { Combobox, Portal, useFilter, useListCollection } from "@chakra-ui/react";
+import { stockOptions, symbolLabel } from "../Utils/stocks";
 
 export default function StockSelector({ selectedSymbol, onSymbolChange }) {
-  // Handler for when the stock selection changes
-  const handleChange = (event, value) => {
-    if (value) {
-      onSymbolChange(value); // Update the selected symbol in App
-    }
-  };
+  const { contains } = useFilter({ sensitivity: "base" });
+  const { collection, filter } = useListCollection({ initialItems: stockOptions, filter: contains });
 
   return (
-    <Autocomplete
-      disablePortal
-      options={nifty50Symbols}
-      value={selectedSymbol} // Bind the state to the component
-      onChange={handleChange}
-      getOptionLabel={(option) => option.replace('.NS', '')} // Remove .NS when displaying options
-      sx={{
-        backgroundColor: grey[900],
-        borderRadius: 2,
-        '& .MuiInputBase-input': {
-          color: "whitesmoke", // Text color for the input
-        },
-        '& .MuiFormLabel-root': {
-          color: "whitesmoke", // Label text color
-        },
-        '& .MuiFormLabel-root.Mui-focused': {
-          color: "whitesmoke", // Label text color when focused
-        },
-        '& .MuiOutlinedInput-root': {
-          '& fieldset': {
-            borderColor: grey[700], // Default border color
-          },
-          '&:hover fieldset': {
-            borderColor: teal[500], // Border color on hover
-          },
-          '&.Mui-focused fieldset': {
-            borderColor: teal[300], // Border color on focus
-          },
-        },
-        '& .MuiSvgIcon-root': {
-          color: "whitesmoke", // Change color of arrow and clear icon
-        },
-      }}
-      slotProps={{
-        popper: {
-          sx: {
-            '& .MuiAutocomplete-listbox': {
-              backgroundColor: grey[900], // Background color for the dropdown
-              color: "whitesmoke", // Text color for dropdown items
-            },
-          },
-        },
-      }}
-      renderInput={(params) => (
-        <TextField {...params} label="Stock" />
-      )}
-    />
+    <Combobox.Root
+      collection={collection}
+      value={[selectedSymbol]}
+      defaultInputValue={symbolLabel(selectedSymbol)}
+      onValueChange={({ value }) => value[0] && onSymbolChange(value[0])}
+      onInputValueChange={({ inputValue, reason }) => filter(reason === "input-change" ? inputValue : "")}
+      openOnClick
+      inputBehavior="autohighlight"
+      width="100%"
+    >
+      <Combobox.Label>Stock</Combobox.Label>
+      <Combobox.Control>
+        <Combobox.Input placeholder="Search a stock" />
+        <Combobox.IndicatorGroup>
+          <Combobox.Trigger />
+        </Combobox.IndicatorGroup>
+      </Combobox.Control>
+      <Portal>
+        <Combobox.Positioner>
+          <Combobox.Content>
+            <Combobox.Empty>No matching stock</Combobox.Empty>
+            {collection.items.map((item) => (
+              <Combobox.Item item={item} key={item.value}>
+                {item.label}
+                <Combobox.ItemIndicator />
+              </Combobox.Item>
+            ))}
+          </Combobox.Content>
+        </Combobox.Positioner>
+      </Portal>
+    </Combobox.Root>
   );
 }
