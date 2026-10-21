@@ -42,23 +42,18 @@ app.use((req, res) => {
 
 // Express 5 forwards rejected promises from async handlers here
 app.use((err, req, res, next) => {
-    req.log.error({ err }, 'Unhandled error');
+    req.log[err.status === 503 ? 'warn' : 'error']({ err }, err.status === 503 ? err.message : 'Unhandled error');
     if (res.headersSent) return next(err);
     res.status(err.status || 500).json({ message: err.expose ? err.message : 'Internal server error' });
 });
 
 // Server
-const server = async () => {
-    try {
-        await db.connect();
-    } catch (err) {
-        logger.fatal({ err }, 'Database connection failed');
-        process.exit(1);
-    }
-
+const server = () => {
+    // Listen first so the platform sees a healthy deploy; requests get 503 until MongoDB connects
     const http = app.listen(config.PORT, () => {
         logger.info(`Server is running on port ${config.PORT}`);
     });
+    db.connectWithRetry();
 
     const shutdown = (signal) => {
         logger.info(`${signal} received, shutting down`);
